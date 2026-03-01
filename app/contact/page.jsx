@@ -1,4 +1,5 @@
 'use client'
+import { supabase } from '../../lib/db'
 import { useState } from 'react'
 
 export default function ContactPage() {
@@ -20,10 +21,26 @@ export default function ContactPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    // Simulate form submission — replace with real API call later
-    await new Promise((r) => setTimeout(r, 1500))
+
+    const { error } = await supabase
+      .from('enquiries')
+      .insert([{
+        name: form.name,
+        company: form.company,
+        phone: form.phone,
+        email: form.email,
+        category: form.category,
+        message: form.message,
+      }])
+
     setLoading(false)
-    setSubmitted(true)
+
+    if (error) {
+      alert('Something went wrong. Please try again or call us directly.')
+      console.error(error)
+    } else {
+      setSubmitted(true)
+    }
   }
 
   return (
@@ -151,7 +168,7 @@ export default function ContactPage() {
                           value={form.name}
                           onChange={handleChange}
                           placeholder="e.g. Rajesh Kumar"
-                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-gray-900"
                         />
                       </div>
                       <div>
@@ -164,7 +181,7 @@ export default function ContactPage() {
                           value={form.company}
                           onChange={handleChange}
                           placeholder="e.g. Kumar Constructions"
-                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-gray-900"
                         />
                       </div>
                     </div>
@@ -182,7 +199,7 @@ export default function ContactPage() {
                           value={form.phone}
                           onChange={handleChange}
                           placeholder="+91 98765 43210"
-                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-gray-900"
                         />
                       </div>
                       <div>
@@ -195,7 +212,7 @@ export default function ContactPage() {
                           value={form.email}
                           onChange={handleChange}
                           placeholder="you@example.com"
-                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-gray-900"
                         />
                       </div>
                     </div>
@@ -210,7 +227,7 @@ export default function ContactPage() {
                         required
                         value={form.category}
                         onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent bg-white"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-gray-900 bg-white"
                       >
                         <option value="">Select a category</option>
                         <option value="road-rollers">Road Rollers</option>
@@ -235,7 +252,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         rows={5}
                         placeholder="Tell us what you need — model, quantity, location, budget, or any specific requirements..."
-                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent resize-none"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-gray-900 resize-none"
                       />
                     </div>
 
